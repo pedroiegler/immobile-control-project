@@ -9,9 +9,12 @@ class CustomerForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'
-
-
+            if field_name == 'is_active':
+                field.widget = forms.CheckboxInput(attrs={'class': 'sr-only'})
+            else:
+                field.widget.attrs.update({
+                    'class': 'h-full w-full border-gray-300 px-2 transition-all border-blue rounded-sm text-xs',
+                })
 
 class MultipleFileInput(forms.ClearableFileInput):
   allow_multiple_selected = True
@@ -40,9 +43,12 @@ class ImmobileForm(forms.ModelForm):
         super().__init__(*args, **kwargs)  
         for field_name, field in self.fields.items():   
             if field.widget.__class__ in [forms.CheckboxInput, forms.RadioSelect]:
-                field.widget.attrs['class'] = 'form-check-input'
-            else:
-                field.widget.attrs['class'] = 'form-control'
+                field.widget = forms.CheckboxInput(attrs={'class': 'sr-only'})
+            elif field_name != 'immobile':
+                additional_class = 'resize-none' if field_name == 'address' else ''
+                field.widget.attrs.update({
+                    'class': f'h-full w-full border-gray-300 px-2 transition-all border-blue rounded-sm text-xs {additional_class}',
+                })
 
 
 class RegisterLocationForm(forms.ModelForm):

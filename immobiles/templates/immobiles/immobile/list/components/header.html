@@ -1,0 +1,38 @@
+<div class="flex items-center justify-between">
+    <div>
+        <h1 class="font-semibold text-xl">Listagem de Imóveis</h1>
+        <span class="text-xs">Total de {{ immobiles|length }} imóveis</span>
+    </div>
+    <div class="bg-gray-200 text-sm text-gray-500 leading-none border-2 border-gray-200 rounded-full inline-flex">
+        <button class="inline-flex items-center transition-colors duration-300 ease-in focus:outline-none hover:text-blue-800 focus:text-blue-800 rounded-l-full px-4 py-2 active" id="btn-grid-immobile-item">
+            <i class='bx bxs-grid-alt mr-1 text-base'></i>            
+            <span>Grade</span>
+        </button>
+        <button class="inline-flex items-center transition-colors duration-300 ease-in focus:outline-none hover:text-blue-800 focus:text-blue-800 rounded-r-full px-4 py-2" id="btn-list-immobile-item">
+            <i class='bx bx-list-ul mr-1 text-base'></i>
+            <span>Lista</span>
+        </button>
+    </div>
+</div>
+<div class="flex justify-between items-end mt-3">
+    <div class="flex items-end w-full">
+        <div class="mr-7 flex w-4/12">
+            <form class="flex w-full" action="{% url 'immobiles:list-immobile' %}">
+                <input name="immobile" type="search" class="w-full py-2 pl-3 pr-4 border-2 border-gray-200 duration-300 text-sm rounded-l-lg focus:border-blue-900" placeholder="Pesquisar por código ou endereço..." aria-label="Search">
+                <button type="submit" class="rounded-r-lg bg-blue-900 px-4 py-1 text-white font-semibold tracking-wide cursor-pointer text-sm"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+        <div class="w-44">
+            <form class="w-full" action="{% url 'immobiles:list-immobile' %}">
+                <label class="block text-sm font-medium text-black dark:text-white">Tipo do Imóvel</label>
+                <select class="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:border-blue-700 block w-full py-2 px-3 dark:bg-gray-500 dark:border-gray-400 dark:placeholder-gray-100 dark:text-white" name="type_item" onchange="this.form.submit()">
+                    <option value="">Todos</option> 
+                    <option value="APARTAMENTO" {% if request.GET.type_item == 'APARTAMENTO' %}selected{% endif %}>APARTAMENTO</option>
+                    <option value="KITNET" {% if request.GET.type_item == 'KITNET' %}selected{% endif %}>KITNET</option>
+                    <option value="CASA" {% if request.GET.type_item == 'CASA' %}selected{% endif %}>CASA</option>
+                </select>
+            </form> 
+        </div>
+    </div>
+    <a href="{% url "immobiles:create-immobile" %}" class="bg-blue-950 px-2 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer"><i class='bx bx-plus text-xl'></i></a>
+</div>

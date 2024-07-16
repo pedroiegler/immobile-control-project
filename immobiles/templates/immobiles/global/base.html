@@ -8,14 +8,24 @@
     </head>
 
     <body>
-        {% include 'immobiles/global/navbar.html' %}
+        <div class="flex flex-row">
+            {% include 'immobiles/global/navbar.html' %}
 
-        {% block content %}{% endblock content %}
+            <div class="w-full" style="margin: 60px 50px;">
+                <div class="bg-white p-10 rounded-md w-full shadow-md" style="height: 85vh; overflow-y: auto;">
+                    {% block content %}{% endblock content %}
+                </div>
+            </div>
+        </div>
 
         {% include 'immobiles/global/footer.html' %}
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
         <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+        <script src="https://unpkg.com/@themesberg/flowbite@1.1.0/dist/flowbite.bundle.js"></script>
+        <script src="https://unpkg.com/flowbite@1.4.1/dist/flowbite.js"></script>
+        <script src="https://unpkg.com/@material-tailwind/html@latest/scripts/ripple.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.all.min.js"></script>
         <script src="{% static "immobiles/js/script.js" %}"></script>
     </body>
 

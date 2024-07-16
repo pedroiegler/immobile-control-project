@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Q
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from immobiles.models import Immobile, ImmobileImage, Customer
 from .forms import CustomerForm, ImmobileForm, RegisterLocationForm
 
@@ -31,6 +32,10 @@ def update_customer(request, pk):
     
     return render(request, 'immobiles/customer/update/index.html', {'form': form, 'customer': customer})
 
+def delete_customer(request, pk):
+    customer = get_object_or_404(Customer, pk=pk)
+    customer.delete()
+    return redirect('immobiles:list-customer')
 
 
 def create_immobile(request):
@@ -50,6 +55,28 @@ def create_immobile(request):
 
 def list_immobile(request):
     immobiles = Immobile.objects.filter(is_locate=False)
+    get_immobile = request.GET.get('immobile') 
+    get_type_item = request.GET.get('type_item')
+
+    if get_immobile:
+        immobiles = Immobile.objects.filter(
+            Q(code__icontains=get_immobile) |
+            Q(address__icontains=get_immobile)
+        )
+
+    if get_type_item:
+        immobiles = Immobile.objects.filter(type_item=get_type_item)
+
+    paginator = Paginator(immobiles, 10)
+    page = request.GET.get("page")
+
+    try:
+        immobiles = paginator.page(page)
+    except PageNotAnInteger:
+        immobiles = paginator.page(1)
+    except EmptyPage:
+        immobiles = paginator.page(paginator.num_pages)
+
     context = { 'immobiles': immobiles }
 
     return render(request, 'immobiles/immobile/list/index.html', context)
@@ -65,6 +92,11 @@ def update_immobile(request, pk):
             return redirect('immobiles:list-immobile') 
     
     return render(request, 'immobiles/immobile/update/index.html', {'form': form, 'immobile': immobile})
+
+def delete_immobile(request, pk):
+    immobile = get_object_or_404(Immobile, pk=pk)
+    immobile.delete()
+    return redirect('immobiles:list-immobile')
 
 
 def create_register(request, id):

@@ -1,50 +1,64 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+{% load static %}
 
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+<div class="bg-gray-200 font-sans">
+    <div class="flex flex-col sm:flex-row ">
+        
+        <div class="w-64 h-screen bg-gray-800">
+            <div class="flex items-center justify-center mt-10">
+                <img class="w-40" src="{% static "immobiles/images/logo.png" %}">
+            </div>
 
-            <ul class="navbar-nav gap-3 mb-2 mb-lg-0 mx-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'immobiles:list-report' %}">Relatório</a>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Imóvel
+            <nav class="mt-7">
+                <div>
+                    <a href="{% url 'immobiles:list-report' %}" class="w-full flex justify-between items-center py-3 px-6 text-gray-100 cursor-pointer hover:bg-gray-700 hover:text-gray-100 focus:outline-none">
+                        <span class="flex items-center">
+                            <i class='bx bxs-report text-xl' style='color:#ffffff' ></i>
+                            <span class="mt-2 mr-4 mb-2 ml-3 font-medium text-sm">Relatório</span>
+                        </span>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-dark">
-                        <li>
-                            <a class="dropdown-item" href="{% url 'immobiles:create-immobile' %}">Cadastrar</a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="{% url 'immobiles:list-immobile' %}">Listar</a>
-                        </li>
-                    </ul>
-                </li> 
+                </div>
+                <div x-data="{ open: false }">
+                    <button @click="open = !open" class="w-full flex justify-between items-center py-3 px-6 text-gray-100 cursor-pointer hover:bg-gray-700 hover:text-gray-100 focus:outline-none">
+                        <span class="flex items-center">
+                            <i class='bx bx-building-house text-xl' style='color:#ffffff'></i>
+                            <span class="mt-2 mr-4 mb-2 ml-3 font-medium text-sm">Imóveis</span>
+                        </span>
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Cliente
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-dark">
-                        <li>
-                            <a class="dropdown-item" href="{% url 'immobiles:create-customer' %}">Cadastrar</a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="{% url 'immobiles:list-customer' %}">Listar</a>
-                        </li>
-                    </ul>
-                </li> 
-            </ul>
+                        <span>
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path x-show="! open" d="M9 5L16 12L9 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"></path>
+                                <path x-show="open" d="M19 9L12 16L5 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                        </span>
+                    </button>
+
+                    <div x-show="open" class="bg-gray-700">
+                        <a class="text-xs py-2 px-16 block text-gray-100 hover:bg-blue-500 hover:text-white" href="{% url 'immobiles:list-immobile' %}">Listar</a>
+                        <a class="text-xs py-2 px-16 block text-gray-100 hover:bg-blue-500 hover:text-white" href="{% url 'immobiles:create-immobile' %}">Cadastrar</a>
+                    </div>
+                </div>
+
+                <div x-data="{ open: false }">
+                    <button @click="open = !open" class="w-full flex justify-between items-center py-3 px-6 text-gray-100 cursor-pointer hover:bg-gray-700 hover:text-gray-100 focus:outline-none">
+                        <span class="flex items-center">
+                            <i class='bx bx-user text-xl' style='color:#ffffff' ></i>
+                            <span class="mt-2 mr-4 mb-2 ml-3 font-medium text-sm">Clientes</span>
+                        </span>
+
+                        <span>
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path x-show="! open" d="M9 5L16 12L9 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"></path>
+                                <path x-show="open" d="M19 9L12 16L5 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                        </span>
+                    </button>
+
+                    <div x-show="open" class="bg-gray-700">
+                        <a class="py-2 px-16 block text-xs text-gray-100 hover:bg-blue-500 hover:text-white" href="{% url 'immobiles:list-customer' %}">Listar</a>
+                        <a class="py-2 px-16 block text-xs text-gray-100 hover:bg-blue-500 hover:text-white" href="{% url 'immobiles:create-customer' %}">Cadastrar</a>
+                    </div>
+                </div>
+            </nav>
         </div>
     </div>
-</nav>
+</div>
