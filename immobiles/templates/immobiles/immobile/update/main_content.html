@@ -2,18 +2,50 @@
 
 <div class="container">
     <div class="d-flex gap-4 mt-3"> 
-			        
-        <form class="col-md-6" action="{% url 'immobiles:update-immobile' immobile.pk %}" method="POST" enctype="multipart/form-data">
-            {% csrf_token %} 
-            <h3>Editar Imóvel</h3>
-            {% for field in form %}
-            <div class="mt-3">
-                {{field.label}}
-                {{field}}
+        <h1 class="font-semibold text-xl">Editar Imóvel</h1>
+        <form action="{% url 'immobiles:create-immobile' %}" method="POST" enctype="multipart/form-data" class="mt-10">
+            {% csrf_token %}
+            <div class="grid grid-cols-2 md:grid-cols-2 gap-4 mb-4">
+                {% for field in form %}
+                    {% if field.name == 'immobile' %}
+                        <div class="flex flex-col cursor-pointer text-black input-component mb-8">
+                            <span class="text-black text-sm font-medium mb-3">Imagens</span>
+                            {{ field }}
+                            <div id="image-preview-edit" class="flex flex-wrap gap-2 mt-8"></div>
+                            <div class="mt-5">
+                                <span class="text-black text-sm font-medium mb-3">Imagens cadastradas</span>
+                                <div id="image-preview-edit" class="flex flex-wrap gap-2 mt-4">
+                                    {% for image in immobile.immobile_images.all %}
+                                        <div class="relative">
+                                            <img src="{{ image.image.url }}" alt="Imagem" class="h-40 w-40 object-cover rounded-md" data-id="{{ image.id }}">
+                                            <form method="POST" action="{% url 'immobiles:delete-image' image.id %}">
+                                                <button type="submit" class="bg-red-700 px-2 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer text-sm absolute right-0 bottom-0">
+                                                    <i class='bx bxs-trash-alt'></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% elif field.name == 'address' %}
+                        <div class="relative h-10 input-component mb-5">
+                            {{ field }}
+                            <label for="{{ field.id_for_label }}" class="absolute left-2 transition-all bg-white text-black px-1">
+                                {{ field.label }}
+                            </label>
+                        </div>
+                    {% else %}
+                        <div class="relative h-10 input-component mb-5">
+                            {{ field }}
+                            <label for="{{ field.id_for_label }}" class="absolute left-2 transition-all bg-white text-black px-1">
+                                {{ field.label }}
+                            </label>
+                        </div>
+                    {% endif %}
+                {% endfor %}
             </div>
-            {% endfor %} 
-            <input type="submit" class="btn btn-primary mt-3" value="Salvar">
+            <input type="submit" value="Salvar" onClick="confirmCreate(event, this.closest('form'))" class="bg-blue-800 px-5 py-3 rounded-md text-white font-semibold tracking-wide cursor-pointer text-sm">
         </form>
-
     </div>
 </div>

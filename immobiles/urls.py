@@ -13,6 +13,7 @@ urlpatterns = [
     path('', list_immobile, name="list-immobile"),
     path('update-immobile/<int:pk>/', update_immobile, name="update-immobile"),
     path('delete-immobile/<int:pk>/', delete_immobile, name="delete-immobile"),
+    path('delete-image/<int:pk>/', delete_image, name="delete-image"),
     
     path('create-register/<int:id>/', create_register, name='create-register'), 
     path('list-report/', list_report, name='list-report'), 

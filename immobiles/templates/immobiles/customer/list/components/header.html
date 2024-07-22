@@ -1,0 +1,15 @@
+<div class="flex items-center justify-between">
+    <div>
+        <h1 class="font-semibold text-xl">Listagem de Clientes</h1>
+        <span class="text-xs">Total de {{ customers_count }} clientes</span>
+    </div>
+</div>
+<div class="flex justify-between items-end mt-3">
+    <div class="mt-4 flex w-full">
+        <form class="flex w-full" action="{% url 'immobiles:list-customer' %}">
+            <input name="customer" type="search" class="w-3/12 py-2 pl-3 pr-4 border-1 border-gray-200 duration-100 text-sm rounded-l-lg focus:border-blue-900" placeholder="Pesquisar por nome ou e-mail..." aria-label="Search">
+            <button type="submit" class="rounded-r-lg bg-blue-900 px-4 py-1 text-white font-semibold tracking-wide cursor-pointer text-sm"><i class="fas fa-search"></i></button>
+        </form> 
+    </div>
+    <a href="{% url "immobiles:create-customer" %}" class="bg-blue-900 px-2 py-1 rounded-md text-white font-semibold tracking-wide cursor-pointer"><i class='bx bx-plus text-xl'></i></a>
+</div>

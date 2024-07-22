@@ -1,45 +1,50 @@
 {% load static %}
 
-<div class="container"> 
-    <div class="d-flex gap-4 mt-4">  
-
-		<div class="container mt-5">
-            <!--<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    {% for el in location.immobile_images.all %}
-                        <div class="carousel-item {% if forloop.first %} active {% endif %}">
-                            <img src="{{el.image.url}}" class="d-block w-100" height="500" alt="{{el.id}}">
-                        </div>
-                    {% endfor %}
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-            </div>-->
-        
-            <div class="mt-3">
-                <p>Codígo: {{location.code}}</p>
-                <p>Endereço: {{location.address}}</p>
-                <p>Valor: {{location.price}}</p>
-                <div class="badge bg-success">Tipo: {{location.type_item}}</div> 
-            </div> 
+<div class="container flex"> 
+    <div class="w-3/4">
+        <h1 class="font-semibold text-xl">Registrar Locação</h1>
+        <div class="flex justify-between mt-4">
+            <h3 class="font-light text-sm mt-1"><strong>Código:</strong> {{ location.code }}</h3>
+            <h3 class="font-light text-sm mt-1"><strong>Tipo:</strong> {{ location.type_item }}</h3>
+            <h3 class="font-light text-sm mt-1"><strong>Endereço:</strong> {{ location.address }}</h3>
+            <h3 class="font-light text-sm mt-1"><strong>Valor:</strong> {{ location.price }}</h3>
         </div>
-
-        <form class="col-md-4" action="{% url 'immobiles:create-register' location.id %}" method="POST">
+        <form action="{% url 'immobiles:create-register' location.id %}" method="POST" class="mt-10">
             {% csrf_token %}
-            <h3>Formulário de Registro Locação</h3>
-            {% for field in form %}
-            <div class="mt-3">
-                {{field.label}}
-                {{field}}
+            <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mb-5">
+                {% for field in form %}
+                    <div class="relative h-10 input-component mb-5">
+                        {{ field }}
+                        <label for="{{ field.id_for_label }}" class="absolute left-2 transition-all bg-white px-1">
+                            {{ field.label }}
+                        </label>
+                    </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-            <input type="submit" class="btn btn-primary mt-3" value="Locar">
-        </form> 
-    </div> 
+            <input type="submit" value="Locar" class="bg-blue-800 px-5 py-3 rounded-md text-white font-semibold tracking-wide cursor-pointer text-sm">
+        </form>
+    </div>
+    <div class="w-2/4 border border-gray-300 p-3 rounded-xl shadow-md ml-10">
+        <div x-data="{ activeSlide: 0 }" class="relative h-auto overflow-hidden">
+            <div class="relative h-96 overflow-hidden">
+                {% for el in images_data %}
+                    <div x-show="activeSlide === {{ forloop.counter0 }}" class="absolute inset-0 transition duration-500 ease-in-out transform" :class="{ 'translate-x-0': activeSlide === {{ forloop.counter0 }}, 'translate-x-full': activeSlide !== {{ forloop.counter0 }} }">
+                        <img src="{{ el.image_url }}" alt="" class="w-full h-full object-cover rounded-xl shadow-md">
+                    </div>
+                {% endfor %}
+            </div>
+            {% if images_count > 1 %}
+                <button 
+                    @click="activeSlide = (activeSlide === 0) ? {{ images_count }} - 1 : activeSlide - 1" 
+                    class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-blue-950 text-white px-1 rounded-full transition-transform duration-200 hover:scale-105 hover:px-2">
+                    <i class='bx bxs-chevron-left text-xl'></i>
+                </button>
+                <button 
+                    @click="activeSlide = (activeSlide === {{ images_count }} - 1) ? 0 : activeSlide + 1" 
+                    class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-950 text-white px-1 rounded-full transition-transform duration-200 hover:scale-105 hover:px-2">
+                    <i class='bx bxs-chevron-right text-xl'></i>
+                </button>
+            {% endif %}
+        </div>
+    </div>
 </div>

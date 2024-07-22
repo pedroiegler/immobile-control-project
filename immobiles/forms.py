@@ -16,6 +16,16 @@ class CustomerForm(forms.ModelForm):
                     'class': 'h-full w-full border-gray-300 px-2 transition-all border-blue rounded-sm text-xs',
                 })
 
+            field.label = self.get_custom_label(field_name)
+
+    def get_custom_label(self, field_name):
+        labels = {
+            'name': 'Nome Completo',
+            'email': 'E-mail',
+            'phone': 'Telefone',
+        }
+        return labels.get(field_name, field_name.replace('_', ' ').title())
+
 class MultipleFileInput(forms.ClearableFileInput):
   allow_multiple_selected = True
 
@@ -38,17 +48,32 @@ class ImmobileForm(forms.ModelForm):
         model = Immobile
         fields = '__all__'
         exclude = ('is_locate',)
-        
+
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)  
-        for field_name, field in self.fields.items():   
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
             if field.widget.__class__ in [forms.CheckboxInput, forms.RadioSelect]:
-                field.widget = forms.CheckboxInput(attrs={'class': 'sr-only'})
-            elif field_name != 'immobile':
-                additional_class = 'resize-none' if field_name == 'address' else ''
+                field.widget.attrs.update({'class': 'sr-only'})
+            elif field_name == 'immobile':
+                field.widget.attrs.update({
+                    'class': 'hidden-input',  
+                })
+            else:
+                additional_class = 'resize-none pt-3' if field_name == 'address' else ''
                 field.widget.attrs.update({
                     'class': f'h-full w-full border-gray-300 px-2 transition-all border-blue rounded-sm text-xs {additional_class}',
                 })
+            
+            field.label = self.get_custom_label(field_name)
+
+    def get_custom_label(self, field_name):
+        labels = {
+            'address': 'Endereço',
+            'code': 'Código',
+            'type_item': 'Tipo do Item',
+            'price': 'Preço',
+        }
+        return labels.get(field_name, field_name.replace('_', ' ').title())
 
 
 class RegisterLocationForm(forms.ModelForm):
@@ -58,9 +83,19 @@ class RegisterLocationForm(forms.ModelForm):
     class Meta:
         model = RegisterLocation
         fields = '__all__'
-        exclude = ('immobile','create_at',)
+        exclude = ('immobile',)
         
     def __init__(self, *args, **kwargs): 
         super().__init__(*args, **kwargs)  
         for field_name, field in self.fields.items():   
-              field.widget.attrs['class'] = 'form-control'
+            field.widget.attrs['class'] = 'h-full w-full border-gray-300 px-2 transition-all border-blue rounded-sm text-xs'
+    
+            field.label = self.get_custom_label(field_name)
+
+    def get_custom_label(self, field_name):
+        labels = {
+            'client': 'Cliente',
+            'dt_start': 'Data Inicial',
+            'dt_end': 'Data Final',
+        }
+        return labels.get(field_name, field_name.replace('_', ' ').title())

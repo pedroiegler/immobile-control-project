@@ -13,8 +13,16 @@
                     </div>
                     {% with immobile.immobile_images.all.count as image_count %}
                         {% if image_count > 1 %}
-                            <button @click="activeSlide = (activeSlide === 0) ? {{ immobile.immobile_images.count }} - 1 : activeSlide - 1" class="absolute left-1 top-1/2 transform -translate-y-1/2 bg-blue-950 text-white px-2 py-1 rounded-full"><i class='bx bxs-chevron-left'></i></button>
-                            <button @click="activeSlide = (activeSlide === {{ immobile.immobile_images.count }} - 1) ? 0 : activeSlide + 1" class="absolute right-1 top-1/2 transform -translate-y-1/2 bg-blue-950 text-white px-2 py-1 rounded-full"><i class='bx bxs-chevron-right'></i></button>
+                            <button 
+                                @click="activeSlide = (activeSlide === 0) ? {{ immobile.immobile_images.count }} - 1 : activeSlide - 1" 
+                                class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-blue-950 text-white px-1 rounded-full transition-transform duration-200 hover:scale-105 hover:px-2">
+                                <i class='bx bxs-chevron-left text-xl'></i>
+                            </button>
+                            <button 
+                                @click="activeSlide = (activeSlide === {{ immobile.immobile_images.count }} - 1) ? 0 : activeSlide + 1" 
+                                class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-950 text-white px-1 rounded-full transition-transform duration-200 hover:scale-105 hover:px-2">
+                                <i class='bx bxs-chevron-right text-xl'></i>
+                            </button>
                         {% endif %}
                     {% endwith %}
                 </div>
@@ -25,15 +33,15 @@
                         <div class="relative z-40 flex items-center gap-2">
                             <form class="text-red-700 hover:text-red-800" method="POST" action="{% url 'immobiles:delete-immobile' immobile.pk %}" style="display:inline;">
                                 {% csrf_token %}
-                                <button type="submit" class="cursor-pointer" onClick="confirmDeleteImmobile(event, this.closest('form'), '{{ immobile.code }}', '{{ immobile.type_item }}')">
-                                    <i class='bx bxs-trash-alt text-xl'></i>
+                                <button type="submit" class="cursor-pointer hover:scale-105" onClick="confirmDeleteImmobile(event, this.closest('form'), '{{ immobile.code }}', '{{ immobile.type_item }}')">
+                                    <i class='bx bxs-trash-alt text-xl transform hover:scale-110 transition-transform duration-105'></i>
                                 </button>
                             </form>
                             <a href="{% url 'immobiles:update-immobile' immobile.pk %}">
-                                <i class='bx bxs-edit text-2xl text-blue-700 hover:text-blue-800'></i>
+                                <i class='bx bxs-edit text-2xl text-blue-700 hover:text-blue-800 scale-105 transform hover:scale-110 transition-transform duration-105'></i>
                             </a>
                             <a class="text-blue-900 hover:text-blue-950" href="{% url 'immobiles:create-register' immobile.id %}">
-                                <i class='bx bx-user-plus text-2xl'></i>
+                                <i class='bx bx-user-plus text-2xl transform hover:scale-110 transition-transform duration-105'></i>
                             </a>
                         </div>
                     </div>

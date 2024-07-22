@@ -1,0 +1,54 @@
+<div class="flex items-center justify-between">
+    <div>
+        <h1 class="font-semibold text-xl">Relatório</h1>
+    </div>
+</div>
+<div class="flex justify-between items-end mt-3">
+    <div class="flex w-full items-end">
+        <div class="mt-4 flex w-3/12">
+            <form class="flex w-full" action="{% url 'immobiles:list-report' %}">
+                <input name="customer" type="search" class="w-full py-2 pl-3 pr-4 border-2 border-gray-200 duration-300 text-sm rounded-l-lg focus:border-blue-900" placeholder="Pesquisar por nome ou e-mail..." aria-label="Search">
+                <button type="submit" class="rounded-r-lg bg-blue-900 px-4 py-1 text-white font-semibold tracking-wide cursor-pointer text-sm"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+        <div class="ml-6 w-2/12">
+            <form class="w-full" action="{% url 'immobiles:list-report' %}">
+                <label class="block text-sm font-medium text-black dark:text-white">Tipo de Imóvel</label>
+                <select name="type_item" class="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:border-blue-700 block w-full py-2 px-3 dark:bg-gray-500 dark:border-gray-400 dark:placeholder-gray-100 dark:text-white" onchange="this.form.submit()">
+                    <option value="">Todos</option> 
+                    <option value="APARTAMENTO" {% if request.GET.type_item == 'APARTAMENTO' %}selected{% endif %}>APARTAMENTO</option>
+                    <option value="KITNET" {% if request.GET.type_item == 'KITNET' %}selected{% endif %}>KITNET</option>
+                    <option value="CASA" {% if request.GET.type_item == 'CASA' %}selected{% endif %}>CASA</option>
+                </select>
+            </form> 
+        </div>
+        <div class="ml-7">
+            <form class="w-full" action="{% url 'immobiles:list-report' %}">
+                <label class="block text-sm font-medium text-black dark:text-white">Status da Locação</label>
+                <select name="is_locate" class="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:border-blue-700 block w-full py-2 px-3 dark:bg-gray-500 dark:border-gray-400 dark:placeholder-gray-100 dark:text-white" onchange="this.form.submit()">
+                    <option value="">Todos</option> 
+                    <option value="True" {% if request.GET.is_locate == 'True' %} selected {% endif %}>LOCADO</option>
+                    <option value="False" {% if request.GET.is_locate == 'False' %} selected {% endif %}>NÃO LOCADO</option> 
+                </select>
+            </form> 
+        </div>
+        <div class="ml-7">
+            <form class="flex items-end" action="{% url 'immobiles:list-report' %}"> 
+                <div>
+                    <label class="block text-sm font-medium text-black dark:text-white" for="">Inicio</label>
+                    <input name="dt_start" type="date" value="{{request.GET.dt_start}}" class="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:border-blue-700 block w-full py-2 px-3 dark:bg-gray-500 dark:border-gray-400 dark:placeholder-gray-100 dark:text-white"> 
+                </div>
+                <div class="ml-3">
+                    <label class="block text-sm font-medium text-black dark:text-white" for="">Final</label>
+                    <input name="dt_end" type="date" value="{{request.GET.dt_end}}" class="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:border-blue-700 block w-full py-2 px-3 dark:bg-gray-500 dark:border-gray-400 dark:placeholder-gray-100 dark:text-white"> 
+                </div>
+                <div class="ml-3">
+                    <button class="rounded bg-blue-900 px-4 py-2 text-white font-semibold tracking-wide cursor-pointer text-sm" type="submit"><i class='bx bx-search'></i></button> 
+                </div>
+            </form> 
+        </div>
+        <div class="ml-7 mb-1">
+            <a class="rounded bg-blue-900 px-3 py-1 text-white font-semibold tracking-wide cursor-pointer text-xl" href="{% url 'immobiles:list-report' %}"><i class='bx bx-x'></i></a>
+        </div>
+    </div>
+</div>

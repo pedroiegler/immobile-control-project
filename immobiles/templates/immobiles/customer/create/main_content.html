@@ -2,36 +2,30 @@
 
 <div class="container"> 
     <div class="d-flex gap-4 mt-3">
-        <div class="transition-colors rounded-lg duration-300">
-            <div class="container mx-auto p-1">
-                <div class="bg-white shadow rounded-lg p-10">
-                    <h1 class="font-semibold text-xl">Cadastrar Cliente</h1>
-                    <form action="{% url 'immobiles:create-customer' %}" method="POST" class="mt-10">
-                        {% csrf_token %}
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            {% for field in form %}
-                                {% if field.name == 'is_active' %}
-                                    <div class="relative h-10 input-component" style="position: relative; bottom: 10px;">
-                                        <span class="text-black text-sm font-medium">É ativo?</span>
-                                        <label for="{{ field.id_for_label }}" class="flex items-center cursor-pointer mt-5">
-                                            {{ field }}
-                                            <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
-                                        </label>
-                                    </div>
-                                {% else %}
-                                    <div class="relative h-10 input-component mb-5">
-                                        {{ field }}
-                                        <label for="{{ field.id_for_label }}" class="absolute left-2 transition-all bg-white px-1">
-                                            {{ field.label }}
-                                        </label>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
+        <h1 class="font-semibold text-xl">Cadastrar Cliente</h1>
+        <form action="{% url 'immobiles:create-customer' %}" method="POST" class="mt-10">
+            {% csrf_token %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                {% for field in form %}
+                    {% if field.name == 'is_active' %}
+                        <div class="relative h-10 input-component" style="position: relative; bottom: 10px;">
+                            <span class="text-black text-sm font-medium">É ativo?</span>
+                            <label for="{{ field.id_for_label }}" class="flex items-center cursor-pointer mt-5">
+                                {{ field }}
+                                <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
+                            </label>
                         </div>
-                        <input type="submit" value="Cadastrar" id="theme-toggle" class="bg-blue-800 px-5 py-3 rounded-md text-white font-semibold tracking-wide cursor-pointer text-sm">
-                    </form>
-                </div>
+                    {% else %}
+                        <div class="relative h-10 input-component mb-5">
+                            {{ field }}
+                            <label for="{{ field.id_for_label }}" class="absolute left-2 transition-all bg-white px-1">
+                                {{ field.label }}
+                            </label>
+                        </div>
+                    {% endif %}
+                {% endfor %}
             </div>
-        </div>
+            <input type="submit" value="Cadastrar" id="theme-toggle" class="bg-blue-800 px-5 py-3 rounded-md text-white font-semibold tracking-wide cursor-pointer text-sm">
+        </form>
     </div> 
 </div>

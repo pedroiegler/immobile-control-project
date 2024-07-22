@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Q
+from django.core import serializers
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from immobiles.models import Immobile, ImmobileImage, Customer
 from .forms import CustomerForm, ImmobileForm, RegisterLocationForm
@@ -18,7 +19,31 @@ def create_customer(request):
 
 def list_customer(request):
     customers = Customer.objects.all().order_by('id')
-    return render(request, "immobiles/customer/list/index.html", {'customers': customers})
+    customers_count = customers.count()
+    get_customer = request.GET.get("customer")
+
+    if get_customer:
+        customers = Customer.objects.filter(
+            Q(name__icontains=get_customer) |
+            Q(email__icontains=get_customer)
+        )
+
+    paginator = Paginator(customers, 10)
+    page = request.GET.get("page")
+
+    try:
+        customers = paginator.page(page)
+    except PageNotAnInteger:
+        customers = paginator.page(1)
+    except EmptyPage:
+        customers = paginator.page(paginator.num_pages)
+
+    context = {
+        'customers': customers, 
+        'customers_count': customers_count,
+    }
+    
+    return render(request, "immobiles/customer/list/index.html", context)
 
 def update_customer(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
@@ -55,6 +80,7 @@ def create_immobile(request):
 
 def list_immobile(request):
     immobiles = Immobile.objects.filter(is_locate=False)
+    immobile_count = immobiles.count()
     get_immobile = request.GET.get('immobile') 
     get_type_item = request.GET.get('type_item')
 
@@ -77,7 +103,10 @@ def list_immobile(request):
     except EmptyPage:
         immobiles = paginator.page(paginator.num_pages)
 
-    context = { 'immobiles': immobiles }
+    context = { 
+        'immobiles': immobiles,
+        'immobile_count': immobile_count,
+    }
 
     return render(request, 'immobiles/immobile/list/index.html', context)
 
@@ -98,23 +127,38 @@ def delete_immobile(request, pk):
     immobile.delete()
     return redirect('immobiles:list-immobile')
 
+def delete_image(request, image_id):
+    image = get_object_or_404(ImmobileImage, id=image_id)
+    image.delete()
+    return JsonResponse({'status': 'success'})
 
 def create_register(request, id):
-    get_locate = Immobile.objects.get(id=id) 
-    form = RegisterLocationForm()  
+    get_locate = Immobile.objects.get(id=id)
+    form = RegisterLocationForm()
+    
     if request.method == 'POST':
-        form = RegisterLocationForm(request.POST)
+        form = RegisterLocationForm(request.POST, request.FILES)
         if form.is_valid():
             location_form = form.save(commit=False)
-            location_form.immobile = get_locate 
-            location_form.save() 
-
+            location_form.immobile = get_locate
+            location_form.save()
+            
             immo = Immobile.objects.get(id=id)
             immo.is_locate = True
             immo.save()
 
-            return redirect('immobiles:list-immobile') 
-    context = {'form': form, 'location': get_locate}
+            return redirect('immobiles:list-report')
+    
+    images = ImmobileImage.objects.filter(immobile=id)
+    images_data = [{"image_url": image.image.url} for image in images]
+    images_count = len(images_data)
+
+    context = {
+        'form': form,
+        'location': get_locate,
+        'images_data': images_data,
+        'images_count': images_count,
+    }
     return render(request, 'immobiles/register/create/index.html', context)
 
 
@@ -122,7 +166,7 @@ def list_report(request):
     immobile = Immobile.objects.all()  
     is_locate = request.GET.get("is_locate")
     get_type_item = request.GET.get("type_item")
-    get_client = request.GET.get('client') 
+    get_client = request.GET.get('customer') 
     get_dt_start = request.GET.get('dt_start')
     get_dt_end = request.GET.get('dt_end')
 
@@ -140,5 +184,15 @@ def list_report(request):
 
     if get_type_item:
         immobile = Immobile.objects.filter(type_item=get_type_item)
+
+    paginator = Paginator(immobile, 10)
+    page = request.GET.get("page")
+
+    try:
+        immobile = paginator.page(page)
+    except PageNotAnInteger:
+        immobile = paginator.page(1)
+    except EmptyPage:
+        immobile = paginator.page(paginator.num_pages)
 
     return render(request, 'immobiles/report/list/index.html', {'immobiles': immobile})

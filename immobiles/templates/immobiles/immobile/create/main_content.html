@@ -11,13 +11,7 @@
                         <div class="flex flex-col cursor-pointer text-black input-component mb-8">
                             <span class="text-black text-sm font-medium mb-3">Imagens</span>
                             {{ field }}
-                        </div>
-                    {% elif field.name == 'address' %}
-                        <div class="relative h-10 input-component mb-5">
-                            {{ field }}
-                            <label for="{{ field.id_for_label }}" class="absolute left-2 transition-all bg-white text-black px-1">
-                                {{ field.label }}
-                            </label>
+                            <div id="image-preview-create" class="flex flex-wrap gap-2 mt-8"></div>
                         </div>
                     {% else %}
                         <div class="relative h-10 input-component mb-5">
